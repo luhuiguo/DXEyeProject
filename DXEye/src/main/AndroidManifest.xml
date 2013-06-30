@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.daxun.dxeye"
-    android:versionCode="1"
-    android:versionName="1.0" >
+          package="com.daxun.dxeye"
+          android:versionCode="1"
+          android:versionName="1.0">
 
     <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="16" />
+            android:minSdkVersion="7"
+            android:targetSdkVersion="16"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+            android:name=".CrashApplication"
+            android:allowBackup="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
         <activity
-            android:name="com.daxun.dxeye.MainActivity"
-            android:label="@string/app_name" >
+                android:name=".LoginActivity"
+                android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"/>
+
+        <activity
+                android:name=".ChannelsActivity"
+                android:label="@string/app_name"/>
+        <activity android:name=".PreviewActivity"/>
+
     </application>
 
 </manifest>

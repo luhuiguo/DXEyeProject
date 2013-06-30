@@ -3,13 +3,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.4'
+        classpath 'com.android.tools.build:gradle:0.4.2'
     }
 }
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile files('libs/android-support-v4.jar')
+    compile('org.apache.mina:mina-core:2.0.7'){
+        transitive = false
+    }
+    compile 'org.slf4j:slf4j-android:1.6.1-RC1'
 }
 
 android {
