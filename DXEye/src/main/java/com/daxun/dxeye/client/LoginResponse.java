@@ -38,4 +38,15 @@ public class LoginResponse extends SNVRMessage {
     public void setUserInfo(String userInfo) {
         this.userInfo = userInfo;
     }
+
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "size=" + size +
+                ", type=" + type +
+                ", status=" + status +
+                ", token='" + token + '\'' +
+                ", userInfo='" + userInfo + '\'' +
+                '}';
+    }
 }

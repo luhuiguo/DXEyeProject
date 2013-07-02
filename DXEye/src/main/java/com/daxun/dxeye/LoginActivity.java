@@ -81,45 +81,18 @@ public class LoginActivity extends Activity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//                SharedPreferences.Editor editor = sp.edit();
+//                editor.putString(HOST, host.getText().toString());
+//                editor.putString(PORT,port.getText().toString());
+//                editor.putString(USERNAME, username.getText().toString());
+//                editor.putString(PASSWORD,password.getText().toString());
+//                editor.putBoolean(REMEMBER_ME,rememberMe.isChecked());
+//                editor.commit();
+
                 LoginTask task = new LoginTask();
                 task.execute();
 
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        SNVRClient.getSharedInstance().setHost(host.getText().toString());
-                        SNVRClient.getSharedInstance().setPort(Integer.getInteger(host.getText().toString(), 53403));
-
-                        if (SNVRClient.getSharedInstance().login(username.getText().toString(),password.getText().toString()))
-                        {
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString(HOST, host.getText().toString());
-                            editor.putString(PORT,port.getText().toString());
-                            editor.putString(USERNAME, username.getText().toString());
-                            //editor.putString(PASSWORD,password.getText().toString());
-                            editor.putBoolean(REMEMBER_ME,rememberMe.isChecked());
-                            editor.commit();
-                            if (rememberMe.isChecked()){
-                                sp.edit().putString(PASSWORD,password.getText().toString()).commit();
-                            }else {
-                                sp.edit().remove(PASSWORD).commit();
-
-                            }
-
-                            Intent intent = new Intent();
-                            intent.setClass(LoginActivity.this,MainActivity.class);
-
-                            startActivity(intent);
-
-                            LoginActivity.this.finish();
-
-                        }else{
-//                            Toast.makeText(getApplicationContext(), R.string.login_failed,
-//                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                }).start();
 
 
 
@@ -146,6 +119,9 @@ public class LoginActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
+
+
+
             SNVRClient.getSharedInstance().setHost(host.getText().toString());
             SNVRClient.getSharedInstance().setPort(Integer.getInteger(host.getText().toString(), 53403));
 
@@ -170,7 +146,7 @@ public class LoginActivity extends Activity {
                 editor.putString(HOST, host.getText().toString());
                 editor.putString(PORT,port.getText().toString());
                 editor.putString(USERNAME, username.getText().toString());
-                editor.putString(PORT,password.getText().toString());
+//                editor.putString(PASSWORD,password.getText().toString());
                 editor.putBoolean(REMEMBER_ME,rememberMe.isChecked());
                 editor.commit();
                 if (rememberMe.isChecked()){
@@ -200,7 +176,6 @@ public class LoginActivity extends Activity {
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            progressDialog.dismiss();
         }
 
     }

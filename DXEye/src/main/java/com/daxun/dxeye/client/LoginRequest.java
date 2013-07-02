@@ -7,7 +7,7 @@ public class LoginRequest extends SNVRMessage {
 
     private String username;
     private String password;
-    private int version = 0;
+    private int version = 1;
     private String reserved = "";
 
     public LoginRequest() {
@@ -58,7 +58,9 @@ public class LoginRequest extends SNVRMessage {
     @Override
     public String toString() {
         return "LoginRequest{" +
-                "username='" + username + '\'' +
+                "size=" + size +
+                ", type=" + type +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", version=" + version +
                 ", reserved='" + reserved + '\'' +

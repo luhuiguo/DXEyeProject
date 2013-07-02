@@ -9,9 +9,10 @@ public abstract class SNVRMessage {
 
     public static final int USERNAME_LEN = 20;
     public static final int PASSWORD_LEN = 40;
+    public static final int VERSION_LEN = 4;
     public static final int RESERVED_LEN = 24;
 
-    public static final int LOGIN_REQUEST_LEN = HEADER_LEN + USERNAME_LEN + PASSWORD_LEN + RESERVED_LEN;
+    public static final int LOGIN_REQUEST_LEN = HEADER_LEN + USERNAME_LEN + PASSWORD_LEN + VERSION_LEN + RESERVED_LEN;
 
 
     public static final int TOKEN_LEN = 128;
@@ -31,15 +32,15 @@ public abstract class SNVRMessage {
     public static final int CMD_PTZ_RESPONSE = 0x80090001;
 
 
-    private int size;
+    protected int size;
 
-    private int type;
+    protected int type;
 
-    private int network;
+    protected int network;
 
-    private int source;
+    protected int source;
 
-    private int target;
+    protected int target;
 
 
     protected SNVRMessage(int type) {
@@ -89,5 +90,16 @@ public abstract class SNVRMessage {
 
     public void setTarget(int target) {
         this.target = target;
+    }
+
+    @Override
+    public String toString() {
+        return "SNVRMessage{" +
+                "size=" + size +
+                ", type=" + type +
+                ", network=" + network +
+                ", source=" + source +
+                ", target=" + target +
+                '}';
     }
 }

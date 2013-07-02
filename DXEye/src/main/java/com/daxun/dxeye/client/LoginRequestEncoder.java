@@ -12,6 +12,7 @@ public class LoginRequestEncoder extends SNVRMessageEncoder<LoginRequest>{
 
         out.putString(message.getUsername(),SNVRMessage.USERNAME_LEN,UTF8_ENCODER);
         out.putString(message.getPassword(),SNVRMessage.PASSWORD_LEN,UTF8_ENCODER);
+        out.putInt(message.getVersion());
         out.putString(message.getReserved(),SNVRMessage.RESERVED_LEN,UTF8_ENCODER);
 
 

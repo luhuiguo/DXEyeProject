@@ -4,6 +4,7 @@ import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.future.ReadFuture;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SNVRClient {
 
-    public static final int TIMEOUT = 10000;
+    public static final long TIMEOUT = 10 * 1000L;
 
     private static SNVRClient sharedInstance;
 
@@ -45,9 +46,8 @@ public class SNVRClient {
         connector = new NioSocketConnector();
         connector.setConnectTimeoutMillis(TIMEOUT);
 
-
-        connector.getFilterChain().addLast("logger", new LoggingFilter());
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
+        connector.getFilterChain().addLast("logger", new LoggingFilter());
 
         connector.setHandler(new SNVRHandler());
 
@@ -91,6 +91,7 @@ public class SNVRClient {
                 return false;
             }
             IoSession session = future.getSession();
+
 
             session.write(new LoginRequest(username,password)).awaitUninterruptibly();
 
