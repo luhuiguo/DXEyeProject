@@ -59,7 +59,7 @@ public class LoginRequest extends SNVRMessage {
     public String toString() {
         return "LoginRequest{" +
                 "size=" + size +
-                ", type=" + type +
+                ", type=" + Integer.toHexString(type) +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", version=" + version +

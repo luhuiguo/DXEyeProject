@@ -14,7 +14,7 @@ import java.nio.charset.CharsetEncoder;
  */
 public class LoginResponseDecoder extends SNVRMessageDecoder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginResponseDecoder.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(LoginResponseDecoder.class);
 
     public LoginResponseDecoder() {
         super(SNVRMessage.CMD_LOGIN_RESPONSE);

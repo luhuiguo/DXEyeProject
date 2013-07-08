@@ -43,7 +43,7 @@ public class LoginResponse extends SNVRMessage {
     public String toString() {
         return "LoginResponse{" +
                 "size=" + size +
-                ", type=" + type +
+                ", type=" + Integer.toHexString(type) +
                 ", status=" + status +
                 ", token='" + token + '\'' +
                 ", userInfo='" + userInfo + '\'' +
