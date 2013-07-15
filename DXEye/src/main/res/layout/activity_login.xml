@@ -57,7 +57,9 @@
                 android:id="@+id/port"
                 android:layout_gravity="left|center_vertical"
                 android:hint="@string/port_hint"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:numeric="integer"
+                android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout

@@ -5,7 +5,7 @@ import android.app.Application;
 /**
  * Created by luhuiguo on 13-6-29.
  */
-public class CrashApplication extends Application {
+public class DXEyeApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

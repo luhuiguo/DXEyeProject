@@ -19,5 +19,6 @@ public class SNVRCodecFactory extends DemuxingProtocolCodecFactory {
         super.addMessageDecoder(ChannelResponseDecoder.class);
         super.addMessageDecoder(PtzResponseDecoder.class);
         super.addMessageDecoder(PreviewResponseDecoder.class);
+        super.addMessageDecoder(PreviewDataDecoder.class);
     }
 }

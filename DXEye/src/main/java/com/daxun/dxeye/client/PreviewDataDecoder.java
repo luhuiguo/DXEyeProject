@@ -5,6 +5,8 @@ import org.apache.mina.core.session.IoSession;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luhuiguo on 13-7-7.
@@ -21,8 +23,7 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
     protected SNVRMessage decodeBody(IoSession session, IoBuffer in) throws Exception {
 
 
-
-        PreviewData m=new PreviewData();
+        PreviewData m = new PreviewData();
 
 
         m.setType(in.getInt());
@@ -48,21 +49,48 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
         in.get(); //reserved1
 
         p.setAudioChannelCount(in.get());
-
         p.setAudioBits(in.get());
+        p.setTimeStamp1(in.getInt());
+        p.setTimeStamp2(in.getInt());
+        p.setAudioSamples(in.getInt());
 
+        in.getInt(); //reserved2
 
+        p.setLineCount(in.get());
+        p.setLineWidth(in.get());
+
+        //reserved3
+        for (int i = 0; i < 14; i++) {
+            in.get();
+        }
+        // frame data
+        byte[] data = new byte[p.getLength()];
+        in.get(data);
+        p.setData(data);
+
+        //OSD
+
+        if (p.getLineCount()>0 && p.getLineWidth()>0){
+
+            List<Line> lines = new ArrayList<Line>();
+            for (int i = 0; i< p.getLineCount(); i++){
+                Line line = new Line();
+
+                line.setX(in.getShort());
+                line.setY(in.getShort());
+                line.setContent(in.getString(p.getLineWidth(),UTF8_DECODER));
+                lines.add(line);
+
+            }
+
+            p.setLines(lines);
+
+        }
 
 
 
         m.setPayload(p);
-
-
-
-
-
-
-
+        in.order(ByteOrder.BIG_ENDIAN);
 
         return m;
     }

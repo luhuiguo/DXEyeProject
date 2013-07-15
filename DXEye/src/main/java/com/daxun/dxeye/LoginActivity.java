@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -15,9 +16,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daxun.dxeye.client.Channel;
 import com.daxun.dxeye.client.SNVRClient;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+import java.util.List;
 
 /**
  * Created by luhuiguo on 13-6-28.
@@ -82,53 +87,24 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-//                SharedPreferences.Editor editor = sp.edit();
-//                editor.putString(HOST, host.getText().toString());
-//                editor.putString(PORT,port.getText().toString());
-//                editor.putString(USERNAME, username.getText().toString());
-//                editor.putString(PASSWORD,password.getText().toString());
-//                editor.putBoolean(REMEMBER_ME,rememberMe.isChecked());
-//                editor.commit();
-
                 LoginTask task = new LoginTask();
                 task.execute();
-
-
-
-
-
-
-
-
-
-
             }
         });
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
     class LoginTask extends AsyncTask<Void,Integer,Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
+            SNVRClient client = SNVRClient.getInstance();
 
-
-            SNVRClient.getSharedInstance().setHost(host.getText().toString());
-            SNVRClient.getSharedInstance().setPort(Integer.getInteger(host.getText().toString(), 53403));
-
-            return SNVRClient.getSharedInstance().login(username.getText().toString(),password.getText().toString());
-
+            client.setHost(host.getText().toString());
+            client.setPort(NumberUtils.toInt(port.getText().toString(), 53403));
+            return client.login(username.getText().toString(), password.getText().toString());
         }
-
 
         @Override
         protected void onPreExecute() {
@@ -142,11 +118,50 @@ public class LoginActivity extends Activity {
             progressDialog.dismiss();
 
             if (result){
+
+                ChannelTask task = new ChannelTask();
+                task.execute();
+            }else{
+                Toast.makeText(getApplicationContext(), R.string.login_failed,
+                                    Toast.LENGTH_SHORT).show();
+
+            }
+
+
+
+        }
+
+
+    }
+
+    class ChannelTask extends AsyncTask<Void,Integer,List<Channel>> {
+
+        @Override
+        protected List<Channel> doInBackground(Void... params) {
+
+            SNVRClient client = SNVRClient.getInstance();
+
+            return client.channel();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(LoginActivity.this, "", getString(R.string.retrieving_channels));
+        }
+
+        @Override
+        protected void onPostExecute(List<Channel> result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+            if (result!= null && result.size()>0 ){
+
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(HOST, host.getText().toString());
                 editor.putString(PORT,port.getText().toString());
                 editor.putString(USERNAME, username.getText().toString());
-//                editor.putString(PASSWORD,password.getText().toString());
                 editor.putBoolean(REMEMBER_ME,rememberMe.isChecked());
                 editor.commit();
                 if (rememberMe.isChecked()){
@@ -164,8 +179,8 @@ public class LoginActivity extends Activity {
                 LoginActivity.this.finish();
 
             }else{
-                Toast.makeText(getApplicationContext(), R.string.login_failed,
-                                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.retrieve_channels_failed,
+                        Toast.LENGTH_SHORT).show();
 
             }
 
@@ -173,13 +188,8 @@ public class LoginActivity extends Activity {
 
         }
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
 
     }
-
 
 
 }

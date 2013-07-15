@@ -11,6 +11,10 @@ public class Line {
 
     private String content;
 
+    public Line() {
+
+    }
+
     public Line(int x, int y, String content) {
         this.x = x;
         this.y = y;

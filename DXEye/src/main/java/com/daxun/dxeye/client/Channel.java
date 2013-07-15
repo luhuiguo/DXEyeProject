@@ -1,11 +1,16 @@
 package com.daxun.dxeye.client;
 
+import java.io.Serializable;
+
 /**
  * Created by luhuiguo on 13-7-3.
  */
-public class Channel {
+public class Channel implements Serializable {
+
+
 
     private int id;
+
     private String name;
 
     public Channel() {
