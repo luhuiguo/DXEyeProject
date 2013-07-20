@@ -4,7 +4,6 @@ import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.future.ReadFuture;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
@@ -33,6 +32,8 @@ public class SNVRClient {
     private String token;
 
     private List<Channel> channels;
+
+    private List<Channel> monitors;
 
     //private NioSocketConnector connector;
 
@@ -80,11 +81,26 @@ public class SNVRClient {
     }
 
     public List<Channel> getChannels() {
+        if (channels == null){
+            channels = new ArrayList<Channel>();
+        }
         return channels;
     }
 
     public void setChannels(List<Channel> channels) {
         this.channels = channels;
+    }
+
+    public List<Channel> getMonitors() {
+
+        if (monitors == null){
+            monitors = new ArrayList<Channel>();
+        }
+        return monitors;
+    }
+
+    public void setMonitors(List<Channel> monitors) {
+        this.monitors = monitors;
     }
 
     public boolean login(String username,String password){
@@ -226,6 +242,7 @@ public class SNVRClient {
 
                 token = null;
                 channels = null;
+                monitors = null;
 
 
 
@@ -239,6 +256,67 @@ public class SNVRClient {
             session.getService().dispose();
 
         }
+    }
+
+    public void ptz(short channel,byte command,byte option){
+
+
+        NioSocketConnector connector = new NioSocketConnector();
+        connector.setConnectTimeoutMillis(TIMEOUT);
+        connector.getSessionConfig().setUseReadOperation(true);
+
+        connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
+        connector.getFilterChain().addLast("logger", new LoggingFilter());
+
+        LOGGER.debug("Connectting to {}:{}",host,port);
+
+        IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
+
+        try {
+            session.write(new PtzRequest(token,channel,command,option)).awaitUninterruptibly();
+
+            ReadFuture readFuture = session.read();
+
+
+            if (readFuture.awaitUninterruptibly(TIMEOUT,TimeUnit.MILLISECONDS)) {
+
+                PtzResponse message = (PtzResponse) readFuture.getMessage();
+
+                LOGGER.debug("Read message:{}",message);
+                if (0 == message.getStatus()){
+
+                }else{
+
+                }
+
+
+            }
+
+        }catch (Exception e) {
+            LOGGER.warn("Login failed",e);
+        }
+        finally {
+            session.close(true);
+            session.getService().dispose();
+
+        }
+    }
+
+
+    public IoSession preview(short channel, int stream){
+        NioSocketConnector connector = new NioSocketConnector();
+        connector.setConnectTimeoutMillis(TIMEOUT);
+
+        connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
+        connector.getFilterChain().addLast("logger", new LoggingFilter());
+        connector.setHandler(new PreviewHandler(token,channel,stream));
+
+        LOGGER.debug("Connectting to {}:{}",host,port);
+
+        IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
+
+        return session;
+
     }
 
 

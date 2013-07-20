@@ -1,8 +1,12 @@
 package com.daxun.dxeye;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Point;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -21,7 +25,7 @@ public class ChannelAdapter extends BaseAdapter {
     private Context context;
     private  List<Channel> channels;
 
-    public ChannelAdapter(Context context,  List<Channel> channels) {
+    public ChannelAdapter(Context context, List<Channel> channels) {
         super();
         this.context = context;
         this.channels = channels;
@@ -43,6 +47,10 @@ public class ChannelAdapter extends BaseAdapter {
         return channels.get(position).getId();
     }
 
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
 
 
 
@@ -69,6 +77,8 @@ public class ChannelAdapter extends BaseAdapter {
 
         return imageView;
     }
+
+
 
 
 

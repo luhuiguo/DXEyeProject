@@ -194,8 +194,8 @@ public class Payload {
 //                ", timeStamp1=" + timeStamp1 +
 //                ", timeStamp2=" + timeStamp2 +
 //                ", audioSamples=" + audioSamples +
-//                ", lineCount=" + lineCount +
-//                ", lineWidth=" + lineWidth +
+                ", lineCount=" + lineCount +
+                ", lineWidth=" + lineWidth +
 //                ", data=" + Arrays.toString(data) +
                 ", lines=" + lines +
                 '}';

@@ -15,6 +15,15 @@ public class PtzRequest extends SNVRMessage {
         super(PTZ_REQUEST_LEN, CMD_PTZ_REQUEST);
     }
 
+    public PtzRequest(String token, short channel, byte command, byte option) {
+        super(PTZ_REQUEST_LEN, CMD_PTZ_REQUEST);
+        this.token = token;
+        this.device = 0L;
+        this.channel = channel;
+        this.command = command;
+        this.option = option;
+    }
+
     public PtzRequest(String token, long device, short channel, byte command, byte option) {
         super(PTZ_REQUEST_LEN, CMD_PTZ_REQUEST);
         this.token = token;

@@ -44,4 +44,8 @@ public class Channel implements Serializable {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
+
+
 }

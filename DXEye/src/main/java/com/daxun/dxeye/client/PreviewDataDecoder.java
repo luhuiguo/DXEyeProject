@@ -78,7 +78,7 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
 
                 line.setX(in.getShort());
                 line.setY(in.getShort());
-                line.setContent(in.getString(p.getLineWidth(),UTF8_DECODER));
+                line.setContent(in.getString(p.getLineWidth()-4,UTF8_DECODER));
                 lines.add(line);
 
             }

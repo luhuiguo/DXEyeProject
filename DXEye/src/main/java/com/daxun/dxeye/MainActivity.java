@@ -1,57 +1,59 @@
 package com.daxun.dxeye;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.daxun.dxeye.client.Channel;
 import com.daxun.dxeye.client.SNVRClient;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
+
+    private static final String TAG = ChannelActivity.class.getSimpleName();
 
     private GridView gridView;
-
-    private List<Channel> channels;
-
-
 
     private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate");
+        Log.d(TAG, "channels:"+ SNVRClient.getInstance().getMonitors());
+
         setContentView(R.layout.activity_main);
-        gridView = (GridView)findViewById(R.id.gridView);
 
+        gridView = (GridView) findViewById(R.id.gridView);
 
-
-        gridView.setAdapter(new ChannelAdapter(this,SNVRClient.getInstance().getChannels()));
+        gridView.setAdapter(new ChannelAdapter(this, SNVRClient.getInstance().getMonitors()));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Channel c = (Channel)adapterView.getItemAtPosition(i);
+                Channel c = (Channel) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, PreviewActivity.class);
-                intent.putExtra(Constants.CHANNEL_KEY,c);
+                intent.putExtra(Constants.CHANNEL_KEY, c);
 
                 startActivity(intent);
 
@@ -60,6 +62,31 @@ public class MainActivity extends Activity {
         });
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+
+        }
     }
 
 
@@ -80,8 +107,7 @@ public class MainActivity extends Activity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.logout)
                         .setMessage(R.string.confirm_logout)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
-                        {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 LogoutTask task = new LogoutTask();
@@ -94,17 +120,40 @@ public class MainActivity extends Activity {
                 return true;
 
             case R.id.action_channel:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, ChannelActivity.class);
-                //intent.putExtra(Constants.CHANNEL_KEY,c);
+                Intent intent = new Intent(MainActivity.this, ChannelActivity.class);
 
-                startActivity(intent);
+                //intent.putExtra(Constants.CHANNELS_KEY, (Serializable) channels);
+
+                startActivityForResult(intent, Constants.CHANNEL_REQUEST);
 
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == Constants.CHANNEL_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                //List<Channel> channels = (List<Channel>) data.getSerializableExtra(Constants.CHANNELS_KEY);
+
+                //SNVRClient.getInstance().setMonitors(channels);
+
+                ((ChannelAdapter) gridView.getAdapter()).notifyDataSetChanged();
+                gridView.invalidateViews();
+
+                gridView.setAdapter(new ChannelAdapter(this, SNVRClient.getInstance().getMonitors()));
+
+
+            } else if (resultCode == RESULT_CANCELED) {
+
+            }
+        }
 
     }
 

@@ -14,6 +14,14 @@ public class PreviewRequest extends SNVRMessage {
         super(PREVIEW_REQUEST_LEN, CMD_PREVIEW_REQUEST);
     }
 
+    public PreviewRequest(String token, short channel, int stream) {
+        super(PREVIEW_REQUEST_LEN, CMD_PREVIEW_REQUEST);
+        this.token = token;
+        this.device = 0L;
+        this.channel = channel;
+        this.stream = stream;
+    }
+
     public PreviewRequest(String token, long device, short channel, int stream) {
         super(PREVIEW_REQUEST_LEN, CMD_PREVIEW_REQUEST);
         this.token = token;
