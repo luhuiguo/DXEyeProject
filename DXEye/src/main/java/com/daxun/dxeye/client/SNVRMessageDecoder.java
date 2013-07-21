@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
+import static com.daxun.dxeye.Constants.HEADER_LEN;
+
 /**
  * Created by luhuiguo on 13-6-29.
  */
@@ -39,7 +41,7 @@ public abstract class SNVRMessageDecoder implements MessageDecoder {
     @Override
     public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
 
-        if (in.remaining() < SNVRMessage.HEADER_LEN) {
+        if (in.remaining() < HEADER_LEN) {
             return MessageDecoderResult.NEED_DATA;
         }
 
@@ -67,7 +69,7 @@ public abstract class SNVRMessageDecoder implements MessageDecoder {
             readHeader = true;
         }
 
-        if (in.remaining() < size - SNVRMessage.HEADER_LEN) {
+        if (in.remaining() < size - HEADER_LEN) {
             return MessageDecoderResult.NEED_DATA;
         }
 

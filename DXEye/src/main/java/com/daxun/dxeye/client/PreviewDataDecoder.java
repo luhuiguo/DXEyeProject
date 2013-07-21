@@ -3,10 +3,11 @@ package com.daxun.dxeye.client;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 
-import java.io.ByteArrayInputStream;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.daxun.dxeye.Constants.CMD_PREVIEW_DATA;
 
 /**
  * Created by luhuiguo on 13-7-7.
@@ -16,7 +17,7 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
     //private static final Logger LOGGER = LoggerFactory.getLogger(PreviewResponseDecoder.class);
 
     public PreviewDataDecoder() {
-        super(SNVRMessage.CMD_PREVIEW_DATA);
+        super(CMD_PREVIEW_DATA);
     }
 
     @Override
@@ -70,15 +71,15 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
 
         //OSD
 
-        if (p.getLineCount()>0 && p.getLineWidth()>0){
+        if (p.getLineCount() > 0 && p.getLineWidth() > 0) {
 
             List<Line> lines = new ArrayList<Line>();
-            for (int i = 0; i< p.getLineCount(); i++){
+            for (int i = 0; i < p.getLineCount(); i++) {
                 Line line = new Line();
 
                 line.setX(in.getShort());
                 line.setY(in.getShort());
-                line.setContent(in.getString(p.getLineWidth()-4,UTF8_DECODER));
+                line.setContent(in.getString(p.getLineWidth() - 4, UTF8_DECODER));
                 lines.add(line);
 
             }
@@ -86,7 +87,6 @@ public class PreviewDataDecoder extends SNVRMessageDecoder {
             p.setLines(lines);
 
         }
-
 
 
         m.setPayload(p);

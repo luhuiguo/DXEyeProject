@@ -38,7 +38,6 @@ public class SNVRClient {
     //private NioSocketConnector connector;
 
 
-
     public static SNVRClient getInstance() {
         if (sharedInstance == null) {
             synchronized (SNVRClient.class) {
@@ -51,7 +50,6 @@ public class SNVRClient {
     }
 
     public SNVRClient() {
-
 
 
     }
@@ -81,7 +79,7 @@ public class SNVRClient {
     }
 
     public List<Channel> getChannels() {
-        if (channels == null){
+        if (channels == null) {
             channels = new ArrayList<Channel>();
         }
         return channels;
@@ -93,7 +91,7 @@ public class SNVRClient {
 
     public List<Channel> getMonitors() {
 
-        if (monitors == null){
+        if (monitors == null) {
             monitors = new ArrayList<Channel>();
         }
         return monitors;
@@ -103,9 +101,9 @@ public class SNVRClient {
         this.monitors = monitors;
     }
 
-    public boolean login(String username,String password){
+    public boolean login(String username, String password) {
 
-        boolean ret= false;
+        boolean ret = false;
 
         NioSocketConnector connector = new NioSocketConnector();
         connector.setConnectTimeoutMillis(TIMEOUT);
@@ -114,7 +112,7 @@ public class SNVRClient {
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
         connector.getFilterChain().addLast("logger", new LoggingFilter());
 
-        LOGGER.debug("Connectting to {}:{}",host,port);
+        LOGGER.debug("Connectting to {}:{}", host, port);
 
         ConnectFuture future = connector.connect(new InetSocketAddress(host, port));
         future.awaitUninterruptibly();
@@ -124,22 +122,22 @@ public class SNVRClient {
         IoSession session = future.getSession();
 
         try {
-            LOGGER.debug("Logining {}:{}",username,password);
-            session.write(new LoginRequest(username,password)).awaitUninterruptibly();
+            LOGGER.debug("Logining {}:{}", username, password);
+            session.write(new LoginRequest(username, password)).awaitUninterruptibly();
 
             ReadFuture readFuture = session.read();
 
-            if (readFuture.awaitUninterruptibly(TIMEOUT,TimeUnit.MILLISECONDS)) {
+            if (readFuture.awaitUninterruptibly(TIMEOUT, TimeUnit.MILLISECONDS)) {
 
                 LoginResponse message = (LoginResponse) readFuture.getMessage();
 
-                LOGGER.debug("Read message:{}",message);
+                LOGGER.debug("Read message:{}", message);
 
-                if (0 == message.getStatus()){
+                if (0 == message.getStatus()) {
                     ret = true;
                     token = message.getToken();
-                    LOGGER.debug("Login success, tokin: {}",token);
-                }else{
+                    LOGGER.debug("Login success, tokin: {}", token);
+                } else {
                     ret = false;
                 }
 
@@ -148,22 +146,21 @@ public class SNVRClient {
 
             }
 
-        }catch (Exception e) {
-            LOGGER.warn("Login failed",e);
+        } catch (Exception e) {
+            LOGGER.warn("Login failed", e);
             return false;
-        }
-        finally {
+        } finally {
             session.close(true);
             session.getService().dispose();
 
         }
 
-        LOGGER.debug("ret:{}",ret);
+        LOGGER.debug("ret:{}", ret);
         return ret;
     }
 
 
-    public List<Channel> channel(){
+    public List<Channel> channel() {
 
         List<Channel> list = new ArrayList<Channel>();
 
@@ -175,7 +172,7 @@ public class SNVRClient {
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
         connector.getFilterChain().addLast("logger", new LoggingFilter());
 
-        LOGGER.debug("Connectting to {}:{}",host,port);
+        LOGGER.debug("Connectting to {}:{}", host, port);
         IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
 
         try {
@@ -183,14 +180,14 @@ public class SNVRClient {
 
             ReadFuture readFuture = session.read();
 
-            if (readFuture.awaitUninterruptibly(TIMEOUT,TimeUnit.MILLISECONDS)) {
+            if (readFuture.awaitUninterruptibly(TIMEOUT, TimeUnit.MILLISECONDS)) {
 
                 ChannelResponse message = (ChannelResponse) readFuture.getMessage();
 
-                LOGGER.debug("Read message:{}",message);
+                LOGGER.debug("Read message:{}", message);
 
 
-                if (0 == message.getStatus()){
+                if (0 == message.getStatus()) {
 
                     list.addAll(message.getChannels());
 
@@ -198,23 +195,22 @@ public class SNVRClient {
 
             }
 
-        }catch (Exception e) {
-            LOGGER.warn("Login failed",e);
+        } catch (Exception e) {
+            LOGGER.warn("Login failed", e);
 
-        }
-        finally {
+        } finally {
             session.close(true);
             session.getService().dispose();
 
         }
         channels = list;
 
-        LOGGER.debug("channels:{}",list);
+        LOGGER.debug("channels:{}", list);
         return list;
 
     }
 
-    public void logout(){
+    public void logout() {
 
 
         NioSocketConnector connector = new NioSocketConnector();
@@ -224,7 +220,7 @@ public class SNVRClient {
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
         connector.getFilterChain().addLast("logger", new LoggingFilter());
 
-        LOGGER.debug("Connectting to {}:{}",host,port);
+        LOGGER.debug("Connectting to {}:{}", host, port);
 
         IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
 
@@ -234,31 +230,29 @@ public class SNVRClient {
             ReadFuture readFuture = session.read();
 
 
-            if (readFuture.awaitUninterruptibly(TIMEOUT,TimeUnit.MILLISECONDS)) {
+            if (readFuture.awaitUninterruptibly(TIMEOUT, TimeUnit.MILLISECONDS)) {
 
                 LogoutResponse message = (LogoutResponse) readFuture.getMessage();
 
-                LOGGER.debug("Read message:{}",message);
+                LOGGER.debug("Read message:{}", message);
 
                 token = null;
                 channels = null;
                 monitors = null;
 
 
-
             }
 
-        }catch (Exception e) {
-            LOGGER.warn("Login failed",e);
-        }
-        finally {
+        } catch (Exception e) {
+            LOGGER.warn("Login failed", e);
+        } finally {
             session.close(true);
             session.getService().dispose();
 
         }
     }
 
-    public void ptz(short channel,byte command,byte option){
+    public void ptz(short channel, byte command, byte option) {
 
 
         NioSocketConnector connector = new NioSocketConnector();
@@ -268,34 +262,33 @@ public class SNVRClient {
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
         connector.getFilterChain().addLast("logger", new LoggingFilter());
 
-        LOGGER.debug("Connectting to {}:{}",host,port);
+        LOGGER.debug("Connectting to {}:{}", host, port);
 
         IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
 
         try {
-            session.write(new PtzRequest(token,channel,command,option)).awaitUninterruptibly();
+            session.write(new PtzRequest(token, channel, command, option)).awaitUninterruptibly();
 
             ReadFuture readFuture = session.read();
 
 
-            if (readFuture.awaitUninterruptibly(TIMEOUT,TimeUnit.MILLISECONDS)) {
+            if (readFuture.awaitUninterruptibly(TIMEOUT, TimeUnit.MILLISECONDS)) {
 
                 PtzResponse message = (PtzResponse) readFuture.getMessage();
 
-                LOGGER.debug("Read message:{}",message);
-                if (0 == message.getStatus()){
+                LOGGER.debug("Read message:{}", message);
+                if (0 == message.getStatus()) {
 
-                }else{
+                } else {
 
                 }
 
 
             }
 
-        }catch (Exception e) {
-            LOGGER.warn("Login failed",e);
-        }
-        finally {
+        } catch (Exception e) {
+            LOGGER.warn("Login failed", e);
+        } finally {
             session.close(true);
             session.getService().dispose();
 
@@ -303,24 +296,21 @@ public class SNVRClient {
     }
 
 
-    public IoSession preview(short channel, int stream){
+    public IoSession preview(short channel, int stream) {
         NioSocketConnector connector = new NioSocketConnector();
         connector.setConnectTimeoutMillis(TIMEOUT);
 
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new SNVRCodecFactory()));
         connector.getFilterChain().addLast("logger", new LoggingFilter());
-        connector.setHandler(new PreviewHandler(token,channel,stream));
+        connector.setHandler(new PreviewHandler(token, channel, stream));
 
-        LOGGER.debug("Connectting to {}:{}",host,port);
+        LOGGER.debug("Connectting to {}:{}", host, port);
 
         IoSession session = connector.connect(new InetSocketAddress(host, port)).awaitUninterruptibly().getSession();
 
         return session;
 
     }
-
-
-
 
 
 }

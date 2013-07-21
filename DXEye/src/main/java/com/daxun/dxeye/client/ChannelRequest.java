@@ -3,6 +3,10 @@ package com.daxun.dxeye.client;
 /**
  * Created by luhuiguo on 13-7-3.
  */
+
+import static com.daxun.dxeye.Constants.CHANNEL_REQUEST_LEN;
+import static com.daxun.dxeye.Constants.CMD_CHANNEL_REQUEST;
+
 public class ChannelRequest extends SNVRMessage {
 
     private String token;

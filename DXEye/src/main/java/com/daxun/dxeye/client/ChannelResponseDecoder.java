@@ -8,6 +8,8 @@ import org.apache.mina.core.session.IoSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.daxun.dxeye.Constants.CMD_CHANNEL_RESPONSE;
+
 /**
  * Created by luhuiguo on 13-7-7.
  */
@@ -16,7 +18,7 @@ public class ChannelResponseDecoder extends SNVRMessageDecoder {
     //private static final Logger LOGGER = LoggerFactory.getLogger(ChannelResponseDecoder.class);
 
     public ChannelResponseDecoder() {
-        super(SNVRMessage.CMD_CHANNEL_RESPONSE);
+        super(CMD_CHANNEL_RESPONSE);
     }
 
     @Override

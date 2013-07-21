@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
+import static com.daxun.dxeye.Constants.HEADER_LEN;
+
 /**
  * Created by luhuiguo on 13-6-29.
  */
@@ -25,7 +27,7 @@ public abstract class SNVRMessageEncoder<T extends SNVRMessage> implements Messa
     public void encode(IoSession session, T message, ProtocolEncoderOutput out) throws Exception {
 
 
-        IoBuffer buf= IoBuffer.allocate(SNVRMessage.HEADER_LEN);
+        IoBuffer buf = IoBuffer.allocate(HEADER_LEN);
 
 
         buf.setAutoExpand(true);
@@ -42,10 +44,7 @@ public abstract class SNVRMessageEncoder<T extends SNVRMessage> implements Messa
         out.write(buf);
     }
 
-    protected abstract void encodeBody(IoSession session ,T message ,IoBuffer out) throws Exception;
-
-
-
+    protected abstract void encodeBody(IoSession session, T message, IoBuffer out) throws Exception;
 
 
 }

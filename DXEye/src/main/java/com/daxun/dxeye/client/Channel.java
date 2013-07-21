@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class Channel implements Serializable {
 
 
-
     private int id;
 
     private String name;
@@ -44,8 +43,6 @@ public class Channel implements Serializable {
                 ", name='" + name + '\'' +
                 '}';
     }
-
-
 
 
 }

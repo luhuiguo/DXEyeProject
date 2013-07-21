@@ -17,7 +17,7 @@ public class PreviewHandler extends IoHandlerAdapter {
     private short channel;
     private int stream;
 
-    public PreviewHandler(String token,short channel,int stream) {
+    public PreviewHandler(String token, short channel, int stream) {
         this.token = token;
         this.channel = channel;
         this.stream = stream;
@@ -27,14 +27,14 @@ public class PreviewHandler extends IoHandlerAdapter {
     @Override
     public void sessionOpened(IoSession session) {
 
-        session.write(new PreviewRequest(token,channel,stream));
+        session.write(new PreviewRequest(token, channel, stream));
 
     }
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
 
-        LOGGER.warn("exceptionCaught",cause);
+        LOGGER.warn("exceptionCaught", cause);
         super.exceptionCaught(session, cause);
         session.close(true);
     }
@@ -43,9 +43,9 @@ public class PreviewHandler extends IoHandlerAdapter {
     public void messageReceived(IoSession session, Object message) throws Exception {
         //LOGGER.debug("messageReceived: {}",message);
         super.messageReceived(session, message);
-        if(message instanceof PreviewResponse){
+        if (message instanceof PreviewResponse) {
 
-        }else if(message instanceof PreviewData){
+        } else if (message instanceof PreviewData) {
 
         }
 
@@ -53,7 +53,7 @@ public class PreviewHandler extends IoHandlerAdapter {
 
     @Override
     public void messageSent(IoSession session, Object message) throws Exception {
-        LOGGER.debug("messageSent: {}",message);
+        LOGGER.debug("messageSent: {}", message);
         super.messageSent(session, message);
     }
 }

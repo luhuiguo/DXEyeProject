@@ -1,18 +1,17 @@
 package com.daxun.dxeye.client;
 
-import java.util.Arrays;
-import java.util.List;
+import static com.daxun.dxeye.Constants.CMD_PREVIEW_DATA;
 
 /**
  * Created by luhuiguo on 13-7-3.
  */
+
 public class PreviewData extends SNVRMessage {
 
     private int type;
     private int size;
 
     private Payload payload;
-
 
 
     public PreviewData() {

@@ -3,6 +3,9 @@ package com.daxun.dxeye.client;
 /**
  * Created by luhuiguo on 13-6-29.
  */
+
+import static com.daxun.dxeye.Constants.CMD_LOGIN_RESPONSE;
+
 public class LoginResponse extends SNVRMessage {
 
     private int status;

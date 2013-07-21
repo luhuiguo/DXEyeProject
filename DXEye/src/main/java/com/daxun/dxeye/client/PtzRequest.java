@@ -1,5 +1,8 @@
 package com.daxun.dxeye.client;
 
+import static com.daxun.dxeye.Constants.CMD_PTZ_REQUEST;
+import static com.daxun.dxeye.Constants.PTZ_REQUEST_LEN;
+
 /**
  * Created by luhuiguo on 13-7-3.
  */

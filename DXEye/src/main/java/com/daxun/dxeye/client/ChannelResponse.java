@@ -1,7 +1,8 @@
 package com.daxun.dxeye.client;
 
-import java.util.LinkedHashMap;
 import java.util.List;
+
+import static com.daxun.dxeye.Constants.CMD_CHANNEL_RESPONSE;
 
 /**
  * Created by luhuiguo on 13-7-3.

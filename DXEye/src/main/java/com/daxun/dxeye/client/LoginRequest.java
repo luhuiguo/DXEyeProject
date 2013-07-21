@@ -3,6 +3,10 @@ package com.daxun.dxeye.client;
 /**
  * Created by luhuiguo on 13-6-29.
  */
+
+import static com.daxun.dxeye.Constants.CMD_LOGIN_REQUEST;
+import static com.daxun.dxeye.Constants.LOGIN_REQUEST_LEN;
+
 public class LoginRequest extends SNVRMessage {
 
     private String username;
@@ -14,13 +18,12 @@ public class LoginRequest extends SNVRMessage {
         super(LOGIN_REQUEST_LEN, CMD_LOGIN_REQUEST);
     }
 
-    public LoginRequest(String username,String password) {
+    public LoginRequest(String username, String password) {
         super(LOGIN_REQUEST_LEN, CMD_LOGIN_REQUEST);
         this.username = username;
         this.password = password;
 
     }
-
 
 
     public String getUsername() {

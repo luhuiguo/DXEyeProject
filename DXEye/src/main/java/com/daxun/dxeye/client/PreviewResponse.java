@@ -3,6 +3,9 @@ package com.daxun.dxeye.client;
 /**
  * Created by luhuiguo on 13-7-3.
  */
+
+import static com.daxun.dxeye.Constants.CMD_PREVIEW_RESPONSE;
+
 public class PreviewResponse extends SNVRMessage {
     private int status;
     private int brightness;
